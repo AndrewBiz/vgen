@@ -10,7 +10,7 @@ require_relative '../anb/anb'
 require 'date'
 
 module VGen 
-  VERSION = "0.0.1"
+  VERSION = "0.1.0"
 
   class Runner
     def initialize(argv)
@@ -48,8 +48,16 @@ module VGen
       files_found = files_2_cnv.size
       files_excluded = (files_2_cnv - (files_2_cnv - taboo_files)).size
       
+      i = 0
       files_2_cnv.each do |file|
-        script.add_convert(file, @options.dir_target, taboo_files.include?(file))
+        i += 1
+        ext = File.extname file
+        in_file = File.basename file
+        in_dir = File.dirname file
+        out_file = "#{File.basename(file,ext)}_web_.mp4"
+        out_dir = @options.dir_target
+        
+        script.add_convert(in_dir, in_file, out_dir, out_file, taboo_files.include?(file), "********** PROCESSING #{i} OF #{files_found} **********")
       end      
       #bottom
       script.add_comment 

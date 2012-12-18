@@ -8,7 +8,7 @@ module VGen
     attr_reader :dir_source, :dir_target, :files_to_cnv, :exclude_files
     attr_reader :debug, :rest
     
-    DEF_DIR_TARGET = File.join("..", "vgen")
+    DEF_DIR_TARGET = File.join(".", "vgen")
     DEF_FILES_TO_CNV = ["*.mov", "*.dv", "*.avi", "*.mpg", "*.mts", "*.mp4"]
     
     def initialize(argv)      
