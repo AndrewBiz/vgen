@@ -44,8 +44,9 @@ module ANB
       script = []
       script << %Q{echo "#{echo}"}
       script << %Q{in_file="#{File.join(in_dir, in_file)}"}
-      script << %Q{out_file=$out_dir/#{base}$out_ext}
-      script << %Q{command_line="ffmpeg -i $in_file $vfilter $vcodec $metadata $afilter $acodec $out_file"}
+      script << %Q{out_file=$out_dir"/#{base}"$out_ext}
+      script << %Q{#metadata="-metadata:g creation_time='2000-01-05 14:04:40'" #to explicitely set creation date}
+      script << %Q{command_line="ffmpeg -i \\"$in_file\\" $vfilter $vcodec $metadata $afilter $acodec \\"$out_file\\""}
       script << %Q{echo $command_line}
       script << %Q{eval $command_line}
       script.each { |l| to_comment ? add_comment(l) : @file.puts(l) }

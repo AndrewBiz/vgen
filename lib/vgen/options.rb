@@ -8,13 +8,12 @@ module VGen
     attr_reader :dir_source, :dir_target, :files_to_cnv, :exclude_files
     attr_reader :debug, :rest
 
-    DEF_DIR_TARGET = File.join(".")
     DEF_FILES_TO_CNV = ["*.mov", "*.dv", "*.avi", "*.mpg", "*.mts", "*.mp4"]
 
     def initialize(argv)
       parse(argv)
       @dir_source ||= "."
-      @dir_target ||= DEF_DIR_TARGET
+      @dir_target ||= @dir_source
       @files_to_cnv ||= DEF_FILES_TO_CNV
       @exclude_files ||= []
       @debug ||= false
@@ -36,7 +35,7 @@ module VGen
         end
 
         @dir_target = nil
-        opts.on("-t", "--dir_target DIR", String, "Target DIR, default is '#{DEF_DIR_TARGET}'") do |val|
+        opts.on("-t", "--dir_target DIR", String, "Target DIR, default is Source DIR") do |val|
           @dir_target = val
         end
 

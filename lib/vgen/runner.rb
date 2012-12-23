@@ -10,7 +10,7 @@ require_relative '../anb/anb'
 require 'date'
 
 module VGen 
-  VERSION = "0.2.0"
+  VERSION = "0.2.1"
 
   class Runner
     def initialize(argv)
