@@ -40,12 +40,16 @@ module ANB
       @file.puts %Q{}
     end #def
 
-    def add_convert in_dir, in_file, base, to_comment=false, echo="********************"
+    def add_convert in_dir, in_file, base, dto="", to_comment=false, echo="***"
       script = []
       script << %Q{echo "#{echo}"}
       script << %Q{in_file="#{File.join(in_dir, in_file)}"}
       script << %Q{out_file=$out_dir"/#{base}"$out_ext}
-      script << %Q{#metadata="-metadata:g creation_time='2000-01-05 14:04:40'" #to explicitely set creation date}
+      if dto.empty?
+        script << %Q{#metadata="-metadata:g creation_time='2000-01-01 10:00:00'" #to explicitely set creation date}
+      else
+        script << %Q{metadata="-metadata:g creation_time='#{dto}'" #to explicitely set creation date}
+      end
       script << %Q{command_line="ffmpeg -i \\"$in_file\\" $vfilter $vcodec $metadata $afilter $acodec \\"$out_file\\""}
       script << %Q{echo $command_line}
       script << %Q{eval $command_line}

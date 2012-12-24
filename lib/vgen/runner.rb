@@ -10,7 +10,7 @@ require_relative '../anb/anb'
 require 'date'
 
 module VGen 
-  VERSION = "0.2.1"
+  VERSION = "0.3.0"
 
   class Runner
     def initialize(argv)
@@ -29,12 +29,11 @@ module VGen
       out_dir = @options.dir_target
 
       # generating script
-      script_name = %Q{vgen_#{DateTime.now.strftime('%Y%m%d-%H%M%S')}}
       case ANB::os
       when :windows
-        script = ANB::WinScript.new(script_name)
+        script = ANB::WinScript.new(@options.script_name)
       else
-        script = ANB::UnixScript.new(script_name)
+        script = ANB::UnixScript.new(@options.script_name)
       end
 
       script.add_comment "*** vgen VERSION: #{VGen::VERSION} "
@@ -54,7 +53,16 @@ module VGen
         in_file = File.basename file
         in_dir = File.dirname file
 
-        script.add_convert(in_dir, in_file, "#{File.basename(file,ext)}", taboo_files.include?(file), "********** PROCESSING #{i} OF #{files_found} **********")
+        # date-time-original trying to get from filename:
+        rg = '(?<year>\d\d\d\d)(?<month>\d\d)(?<day>\d\d)\-(?<hour>\d\d)(?<min>\d\d)(?<sec>\d\d)'
+        if ( m = Regexp.new(rg).match(in_file) ) 
+          dto = "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}:#{m[:min]}:#{m[:sec]}"
+        else 
+          dto = ""
+        end  
+        script.add_convert(in_dir, in_file, "#{File.basename(file,ext)}",
+               dto, taboo_files.include?(file), 
+               "********** PROCESSING #{i} OF #{files_found} **********")
       end
       #bottom
       script.add_comment

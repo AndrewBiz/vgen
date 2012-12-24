@@ -2,11 +2,12 @@
 # encoding: UTF-8
 # (с) ANB Andrew Bizyaev Андрей Бизяев
 require 'optparse'
+require 'date'
 
 module VGen
   class Options
     attr_reader :dir_source, :dir_target, :files_to_cnv, :exclude_files
-    attr_reader :debug, :rest
+    attr_reader :script_name, :debug, :rest
 
     DEF_FILES_TO_CNV = ["*.mov", "*.dv", "*.avi", "*.mpg", "*.mts", "*.mp4"]
 
@@ -16,13 +17,14 @@ module VGen
       @dir_target ||= @dir_source
       @files_to_cnv ||= DEF_FILES_TO_CNV
       @exclude_files ||= []
+      @script_name ||= %Q{vgen_#{DateTime.now.strftime('%Y%m%d-%H%M%S')}}
       @debug ||= false
     end #def
 
   private
     def parse(argv)
       OptionParser.new do |opts|
-        opts.banner = "Usage: vgen [-s SOURCE_DIR] [-t TARGET_DIR] [-f file1[,file2]...] [-x x1[,x2]...] [-D]"
+        opts.banner = "Usage: vgen [-s SOURCE_DIR] [-t TARGET_DIR] [-f file1[,file2]...] [-x x1[,x2]...] [-n SCRIPT_NAME] [-D]"
         opts.separator ""
         opts.separator "Generates script to convert files with given masks file1,file2 etc. from SOURCE_DIR to TARGET_DIR using ffmpeg."
         opts.separator ""
@@ -48,6 +50,11 @@ module VGen
         @exclude_files = nil
         opts.on("-x", "--exclude_files x1,x2,x3", Array, "Exclude file mask. These files won't be copied" ) do |val|
           @exclude_files = val
+        end
+
+        @script_name = nil
+        opts.on("-n", "--script_name name", String, "Script name to be generated." ) do |val|
+          @script_name = val
         end
 
         @debug = nil
