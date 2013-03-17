@@ -4,7 +4,7 @@
 
 require_relative 'version'
 require_relative 'options'
-require_relative '../anb/win_script'
+require_relative 'ffmpeg_win_script'
 require_relative 'ffmpeg_unix_script'
 require_relative '../anb/anb'
 
