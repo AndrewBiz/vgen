@@ -2,15 +2,15 @@
 # encoding: UTF-8
 # (с) ANB Andrew Bizyaev Андрей Бизяев 
 
+require_relative 'version'
 require_relative 'options'
 require_relative '../anb/win_script'
-require_relative '../anb/unix_script'
+require_relative 'ffmpeg_unix_script'
 require_relative '../anb/anb'
 
 require 'date'
 
 module VGen 
-  VERSION = "0.3.0"
 
   class Runner
     def initialize(argv)
@@ -31,9 +31,9 @@ module VGen
       # generating script
       case ANB::os
       when :windows
-        script = ANB::WinScript.new(@options.script_name)
+        script = FfmpegWinScript.new(@options.script_name)
       else
-        script = ANB::UnixScript.new(@options.script_name)
+        script = FfmpegUnixScript.new(@options.script_name)
       end
 
       script.add_comment "*** vgen VERSION: #{VGen::VERSION} "
@@ -74,5 +74,5 @@ module VGen
       puts "Script #{script.name} generated, files found: #{files_found}, files excluded: #{files_excluded}"
     end #run
 
-  end #class
-end #module
+  end
+end

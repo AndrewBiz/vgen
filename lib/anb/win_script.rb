@@ -5,7 +5,6 @@
 require_relative "os_script"
 
 module ANB
-
   class WinScript <OSScript
 
     def initialize basename
@@ -22,26 +21,11 @@ module ANB
       @file.puts "rem #{comment}" #.encode("external")
     end #def
 
-    def add_options
-      add_comment "*** you can add options to xcopy (e.g. param=/N):"
-      @file.puts %Q{set param=}
-    end #def
-
-    def add_convert source, target, to_comment=false, options="%param%"
-      # source=source_file, target=target_root_dir
-      target_dir = File.join(target, File.dirname(source), "")
-      str = %Q{xcopy "#{win_separator(source)}" "#{win_separator(target_dir)}" #{options}}
-      if to_comment
-        add_comment str
-      else
-        @file.puts str
-      end
-    end #def
-
     private
 
     def win_separator path
       path.gsub(/#{"/"}/, "\\")
-    end #def
-  end #class
-end #module
+    end
+
+  end
+end

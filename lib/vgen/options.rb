@@ -42,13 +42,13 @@ module VGen
         end
 
         @files_to_cnv = nil
-        opts.on("-f", "--files_to_cnv f1,f2,f3", Array, "Masks of files to be copied",
+        opts.on("-f", "--files_to_cnv f1,f2,f3", Array, "Masks of files to be processed",
                 "If no file is defined the mask '#{DEF_FILES_TO_CNV * ","}' is used by default") do |val|
           @files_to_cnv = val
         end
 
         @exclude_files = nil
-        opts.on("-x", "--exclude_files x1,x2,x3", Array, "Exclude file mask. These files won't be copied" ) do |val|
+        opts.on("-x", "--exclude_files x1,x2,x3", Array, "Exclude file mask. These files won't be processed" ) do |val|
           @exclude_files = val
         end
 
@@ -68,12 +68,12 @@ module VGen
         # No argument, shows at tail.  This will print an options summary.
         opts.on_tail("-h", "-?", "--about", "--help", "Show this message") do
           puts opts
-          exit
+          exit 1
         end
 
         opts.on_tail("-v", "--version", "--ver", "Show version") do
-          puts "vgen.rb version: #{VGen::VERSION}"
-          exit
+          puts "vgen version: #{VGen::VERSION}"
+          exit 1
         end
 
         begin
@@ -82,7 +82,7 @@ module VGen
 
         rescue OptionParser::ParseError => e
           STDERR.puts e.message, "\n", opts
-          exit(-1)
+          exit(1)
         end
       end
     end #def
