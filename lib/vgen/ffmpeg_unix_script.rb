@@ -12,6 +12,8 @@ module VGen
       add_comment "*** ffmpeg parameters:"
       add_comment "* Video filter:"
       @file.puts %Q{vfilter="-vf \\"yadif=0:-1:0, scale='trunc(oh*a/2)*2:480'\\""}
+      add_comment "* Video filter with cropping:"
+      @file.puts %Q{#vfilter="-vf \\"crop=in_w-2*32:in_h-2*24, yadif=0:-1:0, scale='trunc(oh*a/2)*2:480'\\""}
       add_comment "* Audio filter:"
       @file.puts %Q{afilter="-af \\"aformat=sample_rates='22050,44100,48000' \\""}
       add_comment "* Video coder: crf=21 - optimal for web, crf=27 - for small old-foto video"
