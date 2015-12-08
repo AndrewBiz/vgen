@@ -10,6 +10,8 @@ module VGen
 
     def add_options out_dir
       add_comment "*** ffmpeg parameters:"
+      add_comment "* Input prepocessor (e.g. -ss 00:00:00.5 to avoid trash start frames):"
+      @file.puts %Q{preprocessor="-ss 00:00:00"}
       add_comment "* Video filter:"
       @file.puts %Q{vfilter="-vf \\"yadif=0:-1:0, scale='trunc(oh*a/2)*2:480'\\""}
       add_comment "* Video filter with cropping:"
@@ -38,7 +40,7 @@ module VGen
       else
         script << %Q{metadata="-metadata:g creation_time='#{dto}'" #to explicitely set creation date}
       end
-      script << %Q{command_line="ffmpeg -i \\"$in_file\\" $vfilter $vcodec $metadata $afilter $acodec \\"$out_file\\""}
+      script << %Q{command_line="ffmpeg $preprocessor -i \\"$in_file\\" $vfilter $vcodec $metadata $afilter $acodec \\"$out_file\\""}
       script << %Q{echo $command_line}
       script << %Q{eval $command_line}
       script.each { |l| to_comment ? add_comment(l) : @file.puts(l) }
