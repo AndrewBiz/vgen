@@ -37,7 +37,7 @@ module VGen
         end
 
         @dir_target = nil
-        opts.on("-t", "--dir_target DIR", String, "Target DIR, default is Source DIR") do |val|
+        opts.on("-t", "--dir_target DIR", String, "Target DIR relative to Source DIR") do |val|
           @dir_target = val
         end
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby -w -U
 # encoding: UTF-8
-# (с) ANB Andrew Bizyaev Андрей Бизяев 
+# (с) ANB Andrew Bizyaev Андрей Бизяев
 
 require_relative 'version'
 require_relative 'options'
@@ -10,7 +10,7 @@ require_relative '../anb/anb'
 
 require 'date'
 
-module VGen 
+module VGen
 
   class Runner
     def initialize(argv)
@@ -26,6 +26,7 @@ module VGen
       taboo_files = Dir.glob(xmask, File::FNM_CASEFOLD | File::FNM_DOTMATCH)
       files_found = files_2_cnv.size
       files_excluded = (files_2_cnv - (files_2_cnv - taboo_files)).size
+      in_dir = @options.dir_source
       out_dir = @options.dir_target
 
       # generating script
@@ -43,7 +44,7 @@ module VGen
       script.add_comment "    dir_target    = #{@options.dir_target}"
       script.add_comment "    exclude_files = #{@options.exclude_files}"
       script.add_comment ""
-      script.add_options out_dir
+      script.add_options in_dir, out_dir
 
 
       i = 0
@@ -55,13 +56,13 @@ module VGen
 
         # date-time-original trying to get from filename:
         rg = '(?<year>\d\d\d\d)(?<month>\d\d)(?<day>\d\d)\-(?<hour>\d\d)(?<min>\d\d)(?<sec>\d\d)'
-        if ( m = Regexp.new(rg).match(in_file) ) 
+        if ( m = Regexp.new(rg).match(in_file) )
           dto = "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}:#{m[:min]}:#{m[:sec]}"
-        else 
+        else
           dto = ""
-        end  
+        end
         script.add_convert(in_dir, in_file, "#{File.basename(file,ext)}",
-               dto, taboo_files.include?(file), 
+               dto, taboo_files.include?(file),
                "********** PROCESSING #{i} OF #{files_found} **********")
       end
       #bottom

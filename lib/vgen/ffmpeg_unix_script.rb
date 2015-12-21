@@ -8,10 +8,10 @@ module VGen
 
   class FfmpegUnixScript < ANB::UnixScript
 
-    def add_options out_dir
+    def add_options in_dir, out_dir
       add_comment "*** ffmpeg parameters:"
       add_comment "* Input prepocessor (e.g. -ss 00:00:00.5 to avoid trash start frames):"
-      @file.puts %Q{preprocessor="-ss 00:00:00"}
+      @file.puts %Q{preprocessor="-ss 00:00:00.5"}
       add_comment "* Video filter:"
       @file.puts %Q{vfilter="-vf \\"yadif=0:-1:0, scale='trunc(oh*a/2)*2:480'\\""}
       add_comment "* Video filter with cropping:"
@@ -25,7 +25,7 @@ module VGen
       add_comment "* Metadata transormation:"
       @file.puts %Q{metadata="-map_metadata g"}
       add_comment "* Output file parameters:"
-      @file.puts %Q{out_dir="#{out_dir}"}
+      @file.puts %Q{out_dir="#{File.join(in_dir, out_dir)}"}  #relative path
       @file.puts %Q{out_ext="_web_.mp4"}
       @file.puts %Q{}
     end #def
@@ -41,8 +41,10 @@ module VGen
         script << %Q{metadata="-metadata:g creation_time='#{dto}'" #to explicitely set creation date}
       end
       script << %Q{command_line="ffmpeg $preprocessor -i \\"$in_file\\" $vfilter $vcodec $metadata $afilter $acodec \\"$out_file\\""}
+      script << %Q{echo "*** START TIME: "`date "+%Y-%m-%d %H:%M:%S"`}
       script << %Q{echo $command_line}
       script << %Q{eval $command_line}
+      script << %Q{echo "*** FINISH TIME: "`date "+%Y-%m-%d %H:%M:%S"`}
       script.each { |l| to_comment ? add_comment(l) : @file.puts(l) }
       @file.puts %Q{}
     end #def
