@@ -9,7 +9,7 @@ module VGen
     attr_reader :dir_source, :dir_target, :files_to_cnv, :exclude_files
     attr_reader :script_name, :debug, :rest
 
-    DEF_FILES_TO_CNV = ["*.mov", "*.dv", "*.avi", "*.mpg", "*.mts", "*.mp4"]
+    DEF_FILES_TO_CNV = %w(*.mov *.dv *.avi *.mpg *.mts *.mp4 *.3gp *.m4v).freeze
 
     def initialize(argv)
       parse(argv)
