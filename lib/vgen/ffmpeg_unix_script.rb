@@ -34,8 +34,10 @@ module VGen
       @file.puts %Q{acodec="-b:a 128k"}
       add_comment "* Metadata transormation:"
       @file.puts %Q{metadata="-map_metadata g"}
+      
       add_comment "* Output file parameters:"
-      @file.puts %Q{out_dir="#{File.join(in_dir, out_dir)}"}  #relative path
+      # @file.puts %Q{out_dir="#{File.join(in_dir, out_dir)}"}  #relative path
+      @file.puts %Q{out_dir="#{out_dir}"}  #absolute path
       @file.puts %Q{out_ext="_web_.mp4"}
       @file.puts %Q{}
     end #def
