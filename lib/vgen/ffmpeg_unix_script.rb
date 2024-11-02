@@ -13,9 +13,19 @@ module VGen
       add_comment "* Input prepocessor (e.g. -ss 00:00:00.5 to avoid trash start frames):"
       @file.puts %Q{preprocessor="-ss 00:00:00.5"}
       add_comment "* Video filter:"
-      @file.puts %Q{vfilter="-vf \\"yadif=0:-1:0, scale='trunc(oh*a/2)*2:480'\\""}
+
+      # 480p (~640x480)
+      # @file.puts %Q{vfilter="-vf \\"yadif=0:-1:0, scale='trunc(oh*a/2)*2:480'\\""}
+      # add_comment "* Video filter with cropping:"
+      # @file.puts %Q{#vfilter="-vf \\"crop=in_w-2*32:in_h-2*24, yadif=0:-1:0, scale='trunc(oh*a/2)*2:480'\\""}
+
+      # 720p (~1280x720)
+      @file.puts %Q{vfilter="-vf \\"yadif=0:-1:0, scale='trunc(oh*a/2)*2:720'\\""}
       add_comment "* Video filter with cropping:"
-      @file.puts %Q{#vfilter="-vf \\"crop=in_w-2*32:in_h-2*24, yadif=0:-1:0, scale='trunc(oh*a/2)*2:480'\\""}
+      @file.puts %Q{#vfilter="-vf \\"crop=in_w-2*32:in_h-2*24, yadif=0:-1:0, scale='trunc(oh*a/2)*2:720'\\""}
+
+      # 1080p (1920x1080)
+
       add_comment "* Audio filter:"
       @file.puts %Q{afilter="-af 'aformat=sample_rates=22050|44100|48000'"}
       add_comment "* Video coder: crf=21 - optimal for web, crf=27 - for small old-foto video"
